@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <h3>이름 입력</h3>
+  <form th:action="@{/save}" method="post">
+    이름을 입력합니다
+    <input type="text" placeholder="INPUT YOUR NAME" name="name">
+    <input type="submit" value="저장">
+  </form>
+</body>
+</html>

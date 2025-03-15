@@ -1,0 +1,54 @@
+version: '3.8'
+services:
+  my-prod-database:
+    image: mysql:8.0
+    container_name: my-prod-database
+#    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./database/init/:/docker-entrypoint-initdb.d/
+    ports:
+      - "33061:3306"
+    networks:
+      - my-prod-network
+
+  my-prod-redis:
+    image: redis:6
+    container_name: my-prod-redis
+#    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - my-prod-network
+
+  my-app-application:
+    build: .
+    container_name: my-prod-application
+    restart: always
+    ports:
+      - "80:8080"
+    depends_on:
+      - my-prod-database
+      - my-prod-redis
+    environment:
+      environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+    networks:
+      - my-prod-network
+
+networks:
+  my-prod-network:
+    driver: bridge
+
+volumes:
+  mysql_data:

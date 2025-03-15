@@ -1,0 +1,59 @@
+spring:
+  profiles:
+    active: prod
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+spring:
+  config:
+    activate:
+      on-profile: common
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/myapp
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  data:
+    redis:
+      host: localhost  # Docker 컨테이너에서 실행할 경우, localhost 또는 서비스 이름
+      port: 6379
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://my-prod-database:33061/myapp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate # prod 배포시 validate
+    show-sql: true
+
+  data:
+    redis:
+      host: my-prod-redis
+      port: 6379
