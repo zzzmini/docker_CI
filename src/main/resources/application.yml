@@ -1,3 +1,6 @@
+server:
+  port: 80
+
 spring:
   profiles:
     active: prod
@@ -44,7 +47,7 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://my-prod-database:33061/myapp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://my-prod-database:3306/myapp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
   jpa:
